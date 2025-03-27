@@ -10,4 +10,6 @@ const deletePosts = (id) => api.delete(`/posts/${id}`);
 
 const createPosts = (post) => api.post('/posts', post);
 
-export { getPosts, deletePosts, createPosts };
+const updatePosts = (id, post) => api.put(`/posts/${id}`, post)
+
+export { getPosts, deletePosts, createPosts, updatePosts };

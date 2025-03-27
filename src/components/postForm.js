@@ -16,8 +16,8 @@ export default function PostForm({ posts, setPosts }) {
 
   const addPost = () => {
     createPosts({title, body})
-    .then(() => {
-        
+    .then((response) => {
+        setPosts([...posts, response.data])
     })
     .catch(err => {
         console.error(err)
