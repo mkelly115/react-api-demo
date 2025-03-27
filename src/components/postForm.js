@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { createPosts } from "../services/postService";
+import { createPosts, updatePosts } from "../services/postService";
 
 export default function PostForm({ posts, setPosts, editPost, setEditPost }) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
   useEffect(() => {
-    if (editPost) {
+    if (editingPost) {
       setTitle(editPost.title);
       setBody(editPost.body);
     } else {
@@ -17,20 +17,36 @@ export default function PostForm({ posts, setPosts, editPost, setEditPost }) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    addPost();
+    if(editPost){
+    
+    } else {
+        addPost();
+    }
+   
+
     setTitle("");
     setBody("");
   };
 
   const addPost = () => {
-    createPosts({ title, body })
+    updatePosts(editPost.id, { title, body })
       .then((response) => {
-        setPosts([...posts, response.data]);
+        setPosts(posts.map(post => (post.id === editPost.id ? response.data : post)))
       })
       .catch((err) => {
         console.error(err);
       });
   };
+
+  const editingPost = (id, post) => {
+    createPosts({ title, body })
+    .then((response) => {
+      setPosts([...posts, response.data]);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  }
 
   return (
     <form onSubmit={handleSubmit}>
