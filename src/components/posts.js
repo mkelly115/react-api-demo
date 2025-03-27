@@ -35,7 +35,7 @@ export default function Posts(){
     return(
         <div>
             <h1>Posts</h1>
-            <PostForm posts={posts} setPosts={setPosts}></PostForm>
+            <PostForm posts={posts} setPosts={setPosts} editPost={editPost} setEditPost={setEditPost}></PostForm>
             <ul>
                 {
                     posts.map(post => (
