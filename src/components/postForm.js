@@ -6,47 +6,49 @@ export default function PostForm({ posts, setPosts, editPost, setEditPost }) {
   const [body, setBody] = useState("");
 
   useEffect(() => {
-    if (editingPost) {
-      setTitle(editPost.title);
-      setBody(editPost.body);
+    if (editPost) {
+      setTitle(editPost?.title || "");  
+      setBody(editPost?.body || "");    
     } else {
-    setTitle("");
-    setBody("");}
+      setTitle("");
+      setBody("");
+    }
   }, [editPost]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if(editPost){
-    
+    if (editPost) {
+      updatePost();
     } else {
-        addPost();
+      addPost();
     }
-   
 
     setTitle("");
     setBody("");
+    setEditPost(null);
   };
 
-  const addPost = () => {
+  const updatePost = () => {
     updatePosts(editPost.id, { title, body })
       .then((response) => {
-        setPosts(posts.map(post => (post.id === editPost.id ? response.data : post)))
+        setPosts(posts.map((post) => (post.id === editPost.id ? response.data : post)));
+        setEditPost(null); 
       })
       .catch((err) => {
         console.error(err);
       });
   };
 
-  const editingPost = (id, post) => {
+  const addPost = () => {
     createPosts({ title, body })
-    .then((response) => {
-      setPosts([...posts, response.data]);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-  }
+      .then((response) => {
+        setPosts([...posts, response.data]);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -55,14 +57,14 @@ export default function PostForm({ posts, setPosts, editPost, setEditPost }) {
         value={title}
         type="text"
         onChange={(e) => setTitle(e.target.value)}
-      ></input>
+      />
       <div>Body</div>
       <textarea
         value={body}
         onChange={(e) => setBody(e.target.value)}
-      ></textarea>
+      />
       <div>
-        <button type="submit">{editPost ? 'Edit Post' : 'Add Post'}</button>
+        <button type="submit">{editPost ? "Edit Post" : "Add Post"}</button>
       </div>
     </form>
   );
